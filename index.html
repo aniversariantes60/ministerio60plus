@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ministério 60+ — Igreja Metodista Wesleyana de Itaquera</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:    #0C2461;
+      --blue:    #1A56DB;
+      --blue2:   #2D6FE8;
+      --sky:     #3B82F6;
+      --gold:    #D97706;
+      --gold-l:  #FEF3C7;
+      --gold-d:  #B45309;
+      --bg:      #EEF2FA;
+      --white:   #FFFFFF;
+      --border:  #CBD5E1;
+      --txt:     #0F172A;
+      --muted:   #64748B;
+      --light:   #F8FAFF;
+      --green:   #059669;
+      --grn-l:   #D1FAE5;
+      --red:     #DC2626;
+      --red-l:   #FEE2E2;
+      --wa:      #25D366;
+      --sh:      0 1px 4px rgba(12,36,97,.08), 0 1px 2px rgba(12,36,97,.04);
+      --sh2:     0 4px 16px rgba(12,36,97,.10), 0 2px 6px rgba(12,36,97,.06);
+      --sh3:     0 16px 40px rgba(12,36,97,.15), 0 4px 10px rgba(12,36,97,.07);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--txt);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── SCREENS ─── */
+    .screen { display: none; min-height: 100vh; }
+    .screen.active { display: flex; flex-direction: column; }
+
+    /* ─── SHARED HEADER ─── */
+    .top-bar {
+      background: linear-gradient(135deg, #071D4F 0%, var(--navy) 40%, #1240A0 80%, var(--blue) 100%);
+      padding: 1rem 2rem;
+      color: #fff;
+      box-shadow: 0 4px 24px rgba(7,29,79,.45);
+      position: relative;
+      overflow: hidden;
+    }
+    .top-bar::before {
+      content: '';
+      position: absolute;
+      right: -100px; top: -100px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .top-bar-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+    .brand { display: flex; align-items: center; gap: 1rem; }
+    .brand-logo {
+      width: 50px; height: 50px;
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 3px 10px rgba(0,0,0,.3);
+      flex-shrink: 0;
+      background: rgba(255,255,255,.1);
+    }
+    .brand-txt h1 { font-size: 1.0625rem; font-weight: 800; letter-spacing: -.02em; }
+    .brand-txt p  { font-size: .72rem; opacity: .8; margin-top: .1rem; }
+
+    /* ─── LOGIN SCREEN ─── */
+    #screen-login {
+      background: linear-gradient(145deg, #071D4F 0%, #0C2461 40%, #1644A8 75%, #2060D0 100%);
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    #screen-login::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 55% at 10% 65%, rgba(255,255,255,.06) 0%, transparent 100%),
+        radial-gradient(ellipse 45% 40% at 90% 15%, rgba(59,130,246,.18) 0%, transparent 100%);
+      pointer-events: none;
+    }
+    #screen-login::after {
+      content: '✝';
+      position: absolute;
+      right: -30px; bottom: -30px;
+      font-size: 18rem;
+      color: rgba(255,255,255,.03);
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .login-card {
+      background: var(--white);
+      border-radius: 28px;
+      padding: 3rem 2.75rem;
+      width: 100%;
+      max-width: 430px;
+      box-shadow: 0 32px 72px rgba(0,0,0,.28), 0 0 0 1px rgba(255,255,255,.1);
+      position: relative;
+      z-index: 1;
+    }
+    .login-top {
+      text-align: center;
+      margin-bottom: 2.25rem;
+    }
+    .login-logo-wrap {
+      width: 96px; height: 96px;
+      border-radius: 22px;
+      overflow: hidden;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 10px 32px rgba(12,36,97,.35);
+      display: flex; align-items: center; justify-content: center;
+      background: var(--navy);
+    }
+    .login-logo-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .login-top h2 {
+      font-size: 1.625rem;
+      font-weight: 900;
+      color: var(--txt);
+      letter-spacing: -.03em;
+    }
+    .login-top .church-name {
+      font-size: .8rem;
+      color: var(--muted);
+      margin-top: .4rem;
+      line-height: 1.55;
+    }
+    .restricted-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .375rem;
+      background: var(--gold-l);
+      color: var(--gold-d);
+      font-size: .6875rem;
+      font-weight: 700;
+      padding: .3rem .75rem;
+      border-radius: 100px;
+      margin-top: .625rem;
+      border: 1px solid rgba(217,119,6,.25);
+      letter-spacing: .02em;
+    }
+
+    /* ─── FORM ELEMENTS ─── */
+    .fld { margin-bottom: 1.125rem; }
+    .lbl {
+      display: block;
+      font-size: .6875rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: .45rem;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+    .inp {
+      width: 100%;
+      padding: .8125rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: .9375rem;
+      color: var(--txt);
+      background: var(--light);
+      transition: border-color .2s, box-shadow .2s, background .2s;
+    }
+    .inp:focus {
+      outline: none;
+      border-color: var(--blue);
+      background: var(--white);
+      box-shadow: 0 0 0 4px rgba(26,86,219,.1);
+    }
+    .inp::placeholder { color: #B0C0D8; }
+    .hint { font-size: .6875rem; color: var(--muted); margin-top: .375rem; }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: .5rem;
+      padding: .8125rem 1.375rem;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: .9375rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all .2s;
+      text-decoration: none;
+      white-space: nowrap;
+      line-height: 1;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #071D4F, var(--blue2));
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(26,86,219,.4);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(26,86,219,.5); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-block { width: 100%; justify-content: center; }
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 2px solid var(--border);
+    }
+    .btn-ghost:hover { background: var(--light); border-color: #94A3B8; color: var(--txt); }
+    .btn-wa {
+      background: linear-gradient(135deg, #128C7E, var(--wa));
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(37,211,102,.35);
+    }
+    .btn-wa:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,.45); }
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold-d), var(--gold));
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(217,119,6,.35);
+    }
+    .btn-gold:hover { transform: translateY(-2px); }
+    .btn-danger { background: var(--red-l); color: var(--red); border: none; }
+    .btn-danger:hover { background: #FCA5A5; }
+    .btn-sm   { padding: .5rem .875rem; font-size: .8125rem; border-radius: 9px; }
+    .btn-icon { width: 34px; height: 34px; padding: 0; border-radius: 9px; flex-shrink: 0; }
+    .btn-logout {
+      padding: .5rem 1.125rem;
+      border-radius: 9px;
+      font-size: .8125rem;
+      font-weight: 600;
+      background: rgba(255,255,255,.15);
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,.3);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,.28); }
+
+    /* ─── ALERTS ─── */
+    .alert-err {
+      background: var(--red-l);
+      color: var(--red);
+      padding: .75rem 1rem;
+      border-radius: 10px;
+      font-size: .875rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      display: none;
+      align-items: center;
+      gap: .5rem;
+    }
+    .alert-err.show { display: flex; }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      text-align: center;
+      margin: 1.25rem 0;
+      position: relative;
+      color: var(--muted);
+      font-size: .8125rem;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 41%;
+      height: 1px;
+      background: var(--border);
+    }
+    .divider::before { left: 0; }
+    .divider::after  { right: 0; }
+
+    /* ─── REGISTER SCREEN ─── */
+    #screen-register { background: var(--bg); }
+    .reg-body {
+      flex: 1;
+      padding: 2rem 1rem;
+      display: flex;
+      justify-content: center;
+    }
+    .reg-card {
+      background: var(--white);
+      border-radius: 22px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: var(--sh3);
+      margin-top: .5rem;
+      height: fit-content;
+    }
+    .reg-card h2 {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--txt);
+      letter-spacing: -.03em;
+      margin-bottom: .5rem;
+    }
+    .reg-card .sub {
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.65;
+      margin-bottom: 2rem;
+    }
+    .reg-card .sub strong { color: var(--navy); }
+
+    /* ─── SUCCESS ─── */
+    .success-panel { text-align: center; padding: .5rem 0; display: none; }
+    .success-panel.show { display: block; }
+    .suc-circle {
+      width: 84px; height: 84px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #047857, var(--green));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.25rem;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 12px 32px rgba(5,150,105,.4);
+    }
+    .success-panel h2 { font-size: 1.5rem; font-weight: 900; color: var(--txt); margin-bottom: .625rem; }
+    .success-panel p  { color: var(--muted); line-height: 1.65; }
+
+    /* ─── DASHBOARD ─── */
+    #screen-dashboard { background: var(--bg); }
+    .dash-body {
+      flex: 1;
+      padding: 1.75rem 2rem;
+      max-width: 1320px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* ─── BIRTHDAY BANNER ─── */
+    .bday-banner {
+      background: linear-gradient(135deg, var(--gold-d), var(--gold), #FBBF24);
+      border-radius: 18px;
+      padding: 1.25rem 1.5rem;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 8px 28px rgba(217,119,6,.35);
+      display: none;
+      animation: slideDown .4s ease;
+    }
+    .bday-banner.show { display: block; }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .bday-ttl { font-size: 1.0625rem; font-weight: 800; margin-bottom: .875rem; display: flex; align-items: center; gap: .5rem; }
+    .bday-list { display: flex; flex-wrap: wrap; gap: .75rem; }
+    .bday-chip {
+      background: rgba(255,255,255,.22);
+      border-radius: 13px;
+      padding: .75rem 1rem;
+      display: flex; align-items: center; gap: .875rem;
+      flex-wrap: wrap;
+    }
+    .bday-chip-info { display: flex; flex-direction: column; gap: .1rem; }
+    .bday-chip-name { font-weight: 800; font-size: .9375rem; }
+    .bday-chip-age  { font-size: .8125rem; opacity: .9; }
+
+    /* ─── UPCOMING ─── */
+    .upcoming {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 1.125rem 1.375rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--sh);
+      border: 1px solid var(--border);
+      display: none;
+    }
+    .upcoming.show { display: block; }
+    .upcoming-ttl { font-size: .9rem; font-weight: 700; color: var(--navy); margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem; }
+    .up-list { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .up-chip {
+      background: #EFF6FF;
+      color: var(--navy);
+      border-radius: 100px;
+      padding: .35rem .875rem;
+      font-size: .8rem;
+      font-weight: 600;
+      display: flex; align-items: center; gap: .375rem;
+      border: 1px solid #BFDBFE;
+    }
+    .up-days {
+      background: var(--blue2);
+      color: #fff;
+      border-radius: 100px;
+      padding: .1rem .5rem;
+      font-size: .6875rem;
+      font-weight: 700;
+    }
+
+    /* ─── STATS ─── */
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-card {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 1.125rem 1.375rem;
+      box-shadow: var(--sh);
+      display: flex; align-items: center; gap: .875rem;
+      border: 1px solid var(--border);
+      transition: box-shadow .2s;
+    }
+    .stat-card:hover { box-shadow: var(--sh2); }
+    .stat-ico {
+      width: 48px; height: 48px;
+      border-radius: 13px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.375rem;
+      flex-shrink: 0;
+    }
+    .stat-ico.bl { background: #DBEAFE; }
+    .stat-ico.gd { background: var(--gold-l); }
+    .stat-ico.gn { background: var(--grn-l); }
+    .stat-num   { font-size: 1.75rem; font-weight: 900; color: var(--txt); line-height: 1; letter-spacing: -.02em; }
+    .stat-lbl   { font-size: .72rem; color: var(--muted); margin-top: .2rem; font-weight: 500; }
+
+    /* ─── LINK BOX ─── */
+    .link-box {
+      background: linear-gradient(135deg, #EFF6FF, #F0F7FF);
+      border: 1.5px dashed #93C5FD;
+      border-radius: 16px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .link-lbl { font-size: .6875rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: .07em; margin-bottom: .625rem; }
+    .link-row { display: flex; gap: .5rem; align-items: center; }
+    .link-inp {
+      flex: 1;
+      padding: .625rem .875rem;
+      border: 1.5px solid #93C5FD;
+      border-radius: 9px;
+      font-family: inherit;
+      font-size: .8125rem;
+      background: var(--white);
+      color: var(--txt);
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+
+    /* ─── TOOLBAR ─── */
+    .toolbar { display: flex; gap: .75rem; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; }
+    .srch-wrap { flex: 1; min-width: 200px; position: relative; }
+    .srch-wrap input {
+      width: 100%;
+      padding: .75rem 1rem .75rem 2.625rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: .9375rem;
+      background: var(--white);
+      transition: all .2s;
+    }
+    .srch-wrap input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 4px rgba(26,86,219,.08); }
+    .srch-ico { position: absolute; left: .875rem; top: 50%; transform: translateY(-50%); font-size: 1rem; pointer-events: none; }
+
+    /* ─── SECTION HEADER ─── */
+    .sec-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: .5rem; }
+    .sec-ttl  { font-size: 1.0625rem; font-weight: 800; color: var(--navy); }
+    .sec-cnt  { font-size: .875rem; color: var(--muted); }
+
+    /* ─── MEMBER GRID ─── */
+    .mgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1rem; }
+    .mcard {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 1.25rem 1.375rem;
+      box-shadow: var(--sh);
+      transition: all .2s;
+      border: 2px solid transparent;
+    }
+    .mcard:hover { transform: translateY(-3px); box-shadow: var(--sh3); border-color: #BFDBFE; }
+    .mcard.is-bday { border-color: var(--gold); background: linear-gradient(160deg, #FFFBEB 0%, var(--white) 100%); }
+
+    .mcard-head { display: flex; align-items: center; gap: .875rem; margin-bottom: .875rem; }
+    .avatar {
+      width: 50px; height: 50px;
+      border-radius: 14px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, var(--navy), var(--blue2));
+      color: #fff;
+      font-size: 1.0625rem;
+      font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      letter-spacing: -.01em;
+    }
+    .mcard.is-bday .avatar { background: linear-gradient(135deg, var(--gold-d), var(--gold)); }
+    .mcard-info { flex: 1; min-width: 0; }
+    .mcard-name  { font-weight: 800; font-size: .9375rem; color: var(--txt); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mcard-phone { font-size: .8125rem; color: var(--muted); margin-top: .125rem; }
+    .mcard-dob   { font-size: .75rem; color: #94A3B8; margin-top: .25rem; }
+    .mcard-badges { display: flex; flex-wrap: wrap; gap: .375rem; margin-top: .5rem; }
+    .badge {
+      display: inline-flex; align-items: center; gap: .25rem;
+      padding: .25rem .625rem;
+      border-radius: 100px;
+      font-size: .6875rem;
+      font-weight: 700;
+    }
+    .badge-bday { background: var(--gold-l); color: var(--gold-d); border: 1px solid rgba(217,119,6,.2); }
+    .badge-soon { background: var(--grn-l);  color: #065F46;       border: 1px solid rgba(5,150,105,.2); }
+
+    .mcard-foot { display: flex; gap: .5rem; padding-top: .875rem; border-top: 1px solid #F1F5F9; flex-wrap: wrap; }
+
+    /* ─── EMPTY ─── */
+    .empty { text-align: center; padding: 4rem 2rem; color: var(--muted); grid-column: 1 / -1; }
+    .empty-ico { font-size: 3.5rem; margin-bottom: 1rem; opacity: .35; }
+    .empty h3  { font-size: 1.0625rem; font-weight: 700; color: #64748B; margin-bottom: .5rem; }
+    .empty p   { font-size: .875rem; }
+
+    /* ─── MODAL ─── */
+    .overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.55);
+      z-index: 100;
+      align-items: center; justify-content: center;
+      padding: 1rem;
+      backdrop-filter: blur(4px);
+    }
+    .overlay.show { display: flex; }
+    .modal {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 32px 72px rgba(0,0,0,.35);
+      animation: mIn .3s cubic-bezier(.34, 1.56, .64, 1);
+    }
+    @keyframes mIn {
+      from { transform: scale(.92) translateY(16px); opacity: 0; }
+      to   { transform: scale(1)   translateY(0);    opacity: 1; }
+    }
+    .modal-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .modal-hd h3 { font-size: 1.1875rem; font-weight: 800; color: var(--txt); }
+    .btn-x {
+      width: 34px; height: 34px;
+      border-radius: 9px;
+      background: #F1F5F9;
+      border: none;
+      cursor: pointer;
+      font-size: 1.125rem;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted);
+      transition: all .2s;
+    }
+    .btn-x:hover { background: #E2E8F0; color: var(--txt); }
+    .modal-acts { display: flex; gap: .75rem; margin-top: 1.25rem; }
+    .modal-acts .btn { flex: 1; }
+
+    /* ─── REMINDER BUTTON ─── */
+    .btn-reminder {
+      padding: .5rem .875rem;
+      border-radius: 9px;
+      font-size: .8125rem;
+      font-weight: 700;
+      background: rgba(255,255,255,.15);
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,.3);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s;
+      display: flex; align-items: center; gap: .375rem;
+    }
+    .btn-reminder:hover { background: rgba(255,255,255,.28); }
+    .btn-reminder.active { background: rgba(217,119,6,.8); border-color: var(--gold); }
+
+    /* ─── TOAST ─── */
+    #toast {
+      position: fixed;
+      bottom: 2rem; left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0F172A;
+      color: #fff;
+      padding: .875rem 1.625rem;
+      border-radius: 14px;
+      font-size: .9375rem;
+      font-weight: 500;
+      z-index: 200;
+      transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+      white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(0,0,0,.3);
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 640px) {
+      .dash-body   { padding: 1.25rem 1rem; }
+      .stats-row   { grid-template-columns: 1fr 1fr; }
+      .mgrid       { grid-template-columns: 1fr; }
+      .toolbar     { flex-direction: column; align-items: stretch; }
+      .toolbar .btn{ justify-content: center; }
+      .login-card  { padding: 2rem 1.5rem; }
+      .reg-card    { padding: 1.75rem 1.25rem; }
+      .top-bar     { padding: .875rem 1rem; }
+    }
+    @media (max-width: 400px) { .stats-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     LOGIN
+═══════════════════════════════════════ -->
+<div id="screen-login" class="screen">
+  <div class="login-card">
+    <div class="login-top">
+      <div class="login-logo-wrap">
+        <img src="logo.png" alt="Logo IMW" onerror="this.style.display='none'">
+      </div>
+      <h2>Ministério 60+</h2>
+      <p class="church-name">Igreja Metodista Wesleyana<br>de Itaquera</p>
+      <span class="restricted-badge">🔒 Área Restrita — Administração</span>
+    </div>
+
+    <div id="login-err" class="alert-err">⚠️ Usuário ou senha incorretos.</div>
+
+    <form id="login-form" onsubmit="handleLogin(event)">
+      <div class="fld">
+        <label class="lbl">Usuário</label>
+        <input type="text" id="login-user" class="inp" placeholder="Digite seu usuário" autocomplete="username" required>
+      </div>
+      <div class="fld">
+        <label class="lbl">Senha</label>
+        <input type="password" id="login-pass" class="inp" placeholder="••••••••" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top:.375rem;">
+        Entrar no Sistema
+      </button>
+    </form>
+
+    <div class="divider">ou</div>
+    <a href="?mode=register" class="btn btn-ghost btn-block" style="font-size:.875rem;">
+      📋 Página de Cadastro de Membros
+    </a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     REGISTRO
+═══════════════════════════════════════ -->
+<div id="screen-register" class="screen">
+  <div class="top-bar">
+    <div class="top-bar-inner">
+      <div class="brand">
+        <img src="logo.png" class="brand-logo" alt="Logo IMW" onerror="this.style.display='none'">
+        <div class="brand-txt">
+          <h1>Ministério 60+</h1>
+          <p>Igreja Metodista Wesleyana de Itaquera</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reg-body">
+    <div class="reg-card">
+      <div id="reg-form-wrap">
+        <h2>📋 Cadastro de Aniversariantes 60+</h2>
+        <p class="sub">
+          Preencha seus dados para fazer parte do cadastro de aniversariantes do <strong>Ministério 60+</strong>.<br>
+          Todos os campos são obrigatórios.
+        </p>
+        <form id="register-form" onsubmit="handleRegister(event)">
+          <div class="fld">
+            <label class="lbl">Nome Completo</label>
+            <input type="text" id="reg-name" class="inp" placeholder="Seu nome completo" autocomplete="name" required>
+          </div>
+          <div class="fld">
+            <label class="lbl">Telefone / WhatsApp</label>
+            <input type="tel" id="reg-phone" class="inp" placeholder="(11) 99999-9999"
+              oninput="maskPhone(this)" autocomplete="tel" required>
+            <p class="hint">Informe com DDD. Ex: (11) 99999-9999</p>
+          </div>
+          <div class="fld">
+            <label class="lbl">Data de Nascimento</label>
+            <input type="date" id="reg-birth" class="inp" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">✅ Enviar Cadastro</button>
+        </form>
+      </div>
+
+      <div id="reg-success" class="success-panel">
+        <div class="suc-circle">🎉</div>
+        <h2>Cadastro Concluído!</h2>
+        <p>Seus dados foram registrados com sucesso.<br>Seja bem-vindo(a) ao <strong>Ministério 60+</strong>!<br>Que Deus te abençoe! 🙏</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     DASHBOARD
+═══════════════════════════════════════ -->
+<div id="screen-dashboard" class="screen">
+  <div class="top-bar">
+    <div class="top-bar-inner">
+      <div class="brand">
+        <img src="logo.png" class="brand-logo" alt="Logo IMW" onerror="this.style.display='none'">
+        <div class="brand-txt">
+          <h1>Ministério 60+</h1>
+          <p>Sistema de Gestão de Membros</p>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
+        <span style="font-size:.8125rem;opacity:.9;">Olá, <strong>Ivonete</strong> 👋</span>
+        <button id="reminder-btn" class="btn-reminder" onclick="toggleReminder()" title="Ativar lembretes automáticos de aniversário">
+          🔔 Lembretes
+        </button>
+        <button class="btn-logout" onclick="handleLogout()">Sair</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-body">
+
+    <!-- Aniversariantes de hoje -->
+    <div id="bday-banner" class="bday-banner">
+      <div class="bday-ttl">🎂 Aniversariantes de Hoje! Envie uma mensagem especial!</div>
+      <div id="bday-list" class="bday-list"></div>
+    </div>
+
+    <!-- Próximos 7 dias -->
+    <div id="upcoming" class="upcoming">
+      <div class="upcoming-ttl">🗓️ Próximos Aniversariantes (próximos 7 dias)</div>
+      <div id="up-list" class="up-list"></div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-ico bl">👥</div>
+        <div>
+          <div class="stat-num" id="s-total">0</div>
+          <div class="stat-lbl">Total de Membros</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ico gd">🎂</div>
+        <div>
+          <div class="stat-num" id="s-month">0</div>
+          <div class="stat-lbl">Aniversários este Mês</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ico gn">🎉</div>
+        <div>
+          <div class="stat-num" id="s-today">0</div>
+          <div class="stat-lbl">Aniversariantes Hoje</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Link de cadastro -->
+    <div class="link-box">
+      <div class="link-lbl">🔗 Link de Cadastro para Membros</div>
+      <div class="link-row">
+        <input type="text" id="reg-link" class="link-inp" readonly>
+        <button onclick="copyLink()" class="btn btn-ghost btn-sm">📋 Copiar</button>
+        <button onclick="shareWA()" class="btn btn-wa btn-sm">📤 Enviar</button>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="srch-wrap">
+        <span class="srch-ico">🔍</span>
+        <input type="text" id="srch" placeholder="Buscar por nome ou telefone…" oninput="render()">
+      </div>
+      <button onclick="openAdd()" class="btn btn-primary" style="padding:.75rem 1.25rem;">
+        ➕ Novo Membro
+      </button>
+      <button onclick="exportData()" class="btn btn-ghost btn-sm">💾 Exportar</button>
+      <label class="btn btn-ghost btn-sm" style="cursor:pointer;">
+        📂 Importar
+        <input type="file" accept=".json" onchange="importData(event)" style="display:none">
+      </label>
+    </div>
+
+    <!-- Lista -->
+    <div class="sec-hdr">
+      <span class="sec-ttl">📋 Membros Cadastrados</span>
+      <span class="sec-cnt" id="mbr-cnt"></span>
+    </div>
+    <div id="mgrid" class="mgrid"></div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MODAL — ADICIONAR / EDITAR
+═══════════════════════════════════════ -->
+<div id="add-ov" class="overlay">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3 id="modal-ttl">➕ Adicionar Membro</h3>
+      <button class="btn-x" onclick="closeAdd()">✕</button>
+    </div>
+    <form id="add-form" onsubmit="saveMember(event)">
+      <input type="hidden" id="edit-id">
+      <div class="fld">
+        <label class="lbl">Nome Completo</label>
+        <input type="text" id="a-name" class="inp" placeholder="Nome completo" required>
+      </div>
+      <div class="fld">
+        <label class="lbl">Telefone / WhatsApp</label>
+        <input type="tel" id="a-phone" class="inp" placeholder="(11) 99999-9999" oninput="maskPhone(this)" required>
+      </div>
+      <div class="fld">
+        <label class="lbl">Data de Nascimento</label>
+        <input type="date" id="a-birth" class="inp" required>
+      </div>
+      <div class="modal-acts">
+        <button type="button" onclick="closeAdd()" class="btn btn-ghost">Cancelar</button>
+        <button type="submit" id="m-submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MODAL — CONFIRMAR EXCLUSÃO
+═══════════════════════════════════════ -->
+<div id="del-ov" class="overlay">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-hd">
+      <h3>🗑️ Confirmar Exclusão</h3>
+      <button class="btn-x" onclick="closeDel()">✕</button>
+    </div>
+    <p style="color:var(--muted);line-height:1.65;font-size:.9rem;">
+      Tem certeza que deseja remover este membro? Esta ação não pode ser desfeita.
+    </p>
+    <div class="modal-acts">
+      <button onclick="closeDel()" class="btn btn-ghost">Cancelar</button>
+      <button onclick="confirmDel()" class="btn btn-danger">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ─── CONSTANTES ──────────────────────────────────────────
+const SK         = 'ministerio60plus_v1';
+const ADMIN_USER = 'ivonete';
+const ADMIN_PASS = 'imw';
+const NOTIFY_NUM = '5511995823831';  // +55 11 99582-3831
+
+// ─── ESTADO ──────────────────────────────────────────────
+let members = [];
+let delId   = null;
+let editing = false;
+
+// ─── ARMAZENAMENTO ───────────────────────────────────────
+function load() { try { members = JSON.parse(localStorage.getItem(SK)) || []; } catch { members = []; } }
+function save() { localStorage.setItem(SK, JSON.stringify(members)); }
+
+function addM(d) {
+  const m = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    name: d.name.trim(),
+    phone: d.phone.trim(),
+    birthDate: d.birthDate,
+    createdAt: new Date().toISOString()
+  };
+  members.push(m); save(); return m;
+}
+function updM(id, d) {
+  const i = members.findIndex(m => m.id === id);
+  if (i > -1) { members[i] = { ...members[i], name: d.name.trim(), phone: d.phone.trim(), birthDate: d.birthDate }; save(); }
+}
+function delM(id) { members = members.filter(m => m.id !== id); save(); }
+
+// ─── DATAS ───────────────────────────────────────────────
+function dob(s)       { const [y, mo, d] = s.split('-'); return new Date(+y, +mo - 1, +d); }
+function isToday(s)   { const t = new Date(), b = dob(s); return b.getMonth() === t.getMonth() && b.getDate() === t.getDate(); }
+function isMonth(s)   { return dob(s).getMonth() === new Date().getMonth(); }
+function daysUntil(s) {
+  const t = new Date(); t.setHours(0, 0, 0, 0);
+  const b = dob(s);
+  let n = new Date(t.getFullYear(), b.getMonth(), b.getDate());
+  if (n < t) n.setFullYear(t.getFullYear() + 1);
+  return Math.round((n - t) / 86400000);
+}
+function age(s) {
+  const t = new Date(), b = dob(s);
+  let a = t.getFullYear() - b.getFullYear();
+  if (t.getMonth() < b.getMonth() || (t.getMonth() === b.getMonth() && t.getDate() < b.getDate())) a--;
+  return a;
+}
+function fmtD(s) { if (!s) return ''; return dob(s).toLocaleDateString('pt-BR'); }
+function initials(n) { return n.trim().split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase(); }
+
+// ─── ROTEAMENTO ──────────────────────────────────────────
+function boot() {
+  document.getElementById('reg-birth').max = new Date().toISOString().slice(0, 10);
+  const p = new URLSearchParams(location.search);
+  load();
+  if (p.get('action') === 'add' && p.get('m')) { autoAdd(p.get('m')); return; }
+  if (p.get('mode') === 'register')              { show('register'); return; }
+  if (sessionStorage.getItem('m60') === '1')    { show('dashboard'); setupDash(); }
+  else show('login');
+}
+function show(n) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + n).classList.add('active');
+}
+
+// ─── LOGIN / LOGOUT ──────────────────────────────────────
+function handleLogin(e) {
+  e.preventDefault();
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value;
+  const err = document.getElementById('login-err');
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    err.classList.remove('show');
+    sessionStorage.setItem('m60', '1');
+    show('dashboard'); setupDash();
+  } else {
+    err.classList.add('show');
+    document.getElementById('login-pass').value = '';
+    document.getElementById('login-pass').focus();
+  }
+}
+function handleLogout() {
+  sessionStorage.removeItem('m60');
+  show('login');
+  document.getElementById('login-form').reset();
+}
+
+// ─── CADASTRO PÚBLICO ────────────────────────────────────
+function handleRegister(e) {
+  e.preventDefault();
+  const name  = document.getElementById('reg-name').value.trim();
+  const phone = document.getElementById('reg-phone').value.trim();
+  const birth = document.getElementById('reg-birth').value;
+  addM({ name, phone, birthDate: birth });
+  document.getElementById('reg-form-wrap').style.display = 'none';
+  document.getElementById('reg-success').classList.add('show');
+}
+
+function autoAdd(enc) {
+  try {
+    const data = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(enc)))));
+    if (sessionStorage.getItem('m60') === '1') {
+      if (!members.some(m => m.name === data.name && m.phone === data.phone)) { addM(data); load(); toast('✅ Membro adicionado!'); }
+      else toast('⚠️ Membro já cadastrado.');
+      history.replaceState(null, '', location.pathname);
+      show('dashboard'); setupDash();
+    } else {
+      sessionStorage.setItem('m60_pend', enc);
+      show('login');
+    }
+  } catch { show('login'); }
+}
+
+// ─── DASHBOARD ───────────────────────────────────────────
+function setupDash() {
+  setupSW();
+  updateReminderBtn();
+  load();
+  // Verifica aniversários assim que o painel abre (independente do SW)
+  if (localStorage.getItem('reminders_on') === '1') {
+    checkBirthdaysLocally();
+  }
+  const pend = sessionStorage.getItem('m60_pend');
+  if (pend) {
+    sessionStorage.removeItem('m60_pend');
+    try {
+      const d = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(pend)))));
+      if (!members.some(m => m.name === d.name && m.phone === d.phone)) { addM(d); load(); toast('✅ Membro adicionado!'); }
+    } catch {}
+  }
+  document.getElementById('reg-link').value = location.origin + location.pathname + '?mode=register';
+  renderBday(); renderUpcoming(); renderStats(); render();
+}
+
+function renderBday() {
+  const td   = members.filter(m => isToday(m.birthDate));
+  const bar  = document.getElementById('bday-banner');
+  const list = document.getElementById('bday-list');
+  if (!td.length) { bar.classList.remove('show'); return; }
+  bar.classList.add('show');
+  list.innerHTML = td.map(m => `
+    <div class="bday-chip">
+      <div class="bday-chip-info">
+        <span class="bday-chip-name">🎂 ${m.name}</span>
+        <span class="bday-chip-age">${age(m.birthDate)} anos · ${m.phone}</span>
+      </div>
+      <button onclick="sendBday('${m.id}')" class="btn btn-sm"
+        style="background:rgba(255,255,255,.9);color:var(--gold-d);font-weight:800;">
+        📱 Enviar Lembrete
+      </button>
+    </div>`).join('');
+}
+
+function renderUpcoming() {
+  const up  = members.filter(m => { const d = daysUntil(m.birthDate); return d > 0 && d <= 7; })
+                     .sort((a, b) => daysUntil(a.birthDate) - daysUntil(b.birthDate));
+  const sec = document.getElementById('upcoming');
+  const lst = document.getElementById('up-list');
+  if (!up.length) { sec.classList.remove('show'); return; }
+  sec.classList.add('show');
+  lst.innerHTML = up.map(m => {
+    const d = daysUntil(m.birthDate);
+    return `<div class="up-chip">🎉 ${m.name} <span class="up-days">em ${d}d</span></div>`;
+  }).join('');
+}
+
+function renderStats() {
+  document.getElementById('s-total').textContent = members.length;
+  document.getElementById('s-month').textContent = members.filter(m => isMonth(m.birthDate)).length;
+  document.getElementById('s-today').textContent = members.filter(m => isToday(m.birthDate)).length;
+}
+
+function render() {
+  const q    = (document.getElementById('srch')?.value || '').toLowerCase().trim();
+  let   list = members.filter(m => !q || m.name.toLowerCase().includes(q) || m.phone.includes(q));
+  list.sort((a, b) => {
+    const aT = isToday(a.birthDate) ? 0 : 1;
+    const bT = isToday(b.birthDate) ? 0 : 1;
+    if (aT !== bT) return aT - bT;
+    return a.name.localeCompare(b.name, 'pt-BR');
+  });
+
+  const grid = document.getElementById('mgrid');
+  document.getElementById('mbr-cnt').textContent = `${list.length} membro${list.length !== 1 ? 's' : ''}`;
+
+  if (!list.length) {
+    grid.innerHTML = `
+      <div class="empty">
+        <div class="empty-ico">👥</div>
+        <h3>${q ? 'Nenhum resultado encontrado' : 'Nenhum membro cadastrado'}</h3>
+        <p>${q ? 'Tente outro termo de busca.' : 'Adicione membros ou envie o link de cadastro.'}</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(m => {
+    const td   = isToday(m.birthDate);
+    const d    = daysUntil(m.birthDate);
+    const soon = !td && d <= 7;
+    let badges = '';
+    if (td)   badges += `<span class="badge badge-bday">🎂 Aniversário hoje!</span>`;
+    if (soon) badges += `<span class="badge badge-soon">🎉 Em ${d} ${d === 1 ? 'dia' : 'dias'}</span>`;
+
+    return `
+      <div class="mcard${td ? ' is-bday' : ''}">
+        <div class="mcard-head">
+          <div class="avatar">${initials(m.name)}</div>
+          <div class="mcard-info">
+            <div class="mcard-name" title="${m.name}">${m.name}</div>
+            <div class="mcard-phone">📱 ${m.phone}</div>
+            <div class="mcard-dob">🎂 ${fmtD(m.birthDate)} · ${age(m.birthDate)} anos</div>
+            ${badges ? `<div class="mcard-badges">${badges}</div>` : ''}
+          </div>
+        </div>
+        <div class="mcard-foot">
+          ${td
+            ? `<button onclick="sendBday('${m.id}')" class="btn btn-gold btn-sm" style="flex:1;">📱 Enviar Parabéns</button>`
+            : `<button onclick="openWA('${m.phone}')" class="btn btn-sm" style="flex:1;background:var(--grn-l);color:#065F46;font-weight:700;">💬 WhatsApp</button>`
+          }
+          <button onclick="openEdit('${m.id}')" class="btn btn-ghost btn-sm btn-icon" title="Editar">✏️</button>
+          <button onclick="openDel('${m.id}')" class="btn btn-danger btn-sm btn-icon" title="Excluir">🗑️</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// Envia lembrete para o número da coordenadora
+function sendBday(id) {
+  const m = members.find(x => x.id === id);
+  if (!m) return;
+  const a   = age(m.birthDate);
+  const msg = `🎂 *Lembrete de Aniversário — Ministério 60+*\n\nHoje, ${new Date().toLocaleDateString('pt-BR')}, é aniversário de:\n\n👤 *${m.name}*\n📱 ${m.phone}\n🎉 Completando *${a} anos!*\n\nNão esqueça de ligar e parabenizar! 🙏❤️`;
+  window.open(`https://wa.me/${NOTIFY_NUM}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+function openWA(phone) {
+  const clean = phone.replace(/\D/g, '');
+  window.open(`https://wa.me/${clean.startsWith('55') ? clean : '55' + clean}`, '_blank');
+}
+
+// ─── LINK HELPERS ────────────────────────────────────────
+function copyLink() {
+  const v = document.getElementById('reg-link').value;
+  navigator.clipboard.writeText(v)
+    .then(() => toast('📋 Link copiado!'))
+    .catch(() => { document.getElementById('reg-link').select(); document.execCommand('copy'); toast('📋 Link copiado!'); });
+}
+function shareWA() {
+  const v   = document.getElementById('reg-link').value;
+  const msg = `🙏 *Ministério 60+ — Igreja Metodista Wesleyana de Itaquera*\n\nOlá! Clique no link abaixo para fazer seu cadastro:\n\n${v}\n\nPreencha com seu nome, telefone e data de nascimento. Que Deus te abençoe! ✝️`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// ─── MODAIS ──────────────────────────────────────────────
+function openAdd() {
+  editing = false;
+  document.getElementById('modal-ttl').textContent = '➕ Adicionar Membro';
+  document.getElementById('m-submit').textContent  = 'Salvar Membro';
+  document.getElementById('edit-id').value = '';
+  document.getElementById('add-form').reset();
+  document.getElementById('add-ov').classList.add('show');
+  document.getElementById('a-name').focus();
+}
+function closeAdd() { document.getElementById('add-ov').classList.remove('show'); }
+
+function openEdit(id) {
+  const m = members.find(x => x.id === id);
+  if (!m) return;
+  editing = true;
+  document.getElementById('modal-ttl').textContent = '✏️ Editar Membro';
+  document.getElementById('m-submit').textContent  = 'Atualizar';
+  document.getElementById('edit-id').value  = id;
+  document.getElementById('a-name').value   = m.name;
+  document.getElementById('a-phone').value  = m.phone;
+  document.getElementById('a-birth').value  = m.birthDate;
+  document.getElementById('add-ov').classList.add('show');
+  document.getElementById('a-name').focus();
+}
+
+function saveMember(e) {
+  e.preventDefault();
+  const d  = { name: document.getElementById('a-name').value, phone: document.getElementById('a-phone').value, birthDate: document.getElementById('a-birth').value };
+  const id = document.getElementById('edit-id').value;
+  if (editing && id) { updM(id, d); toast('✅ Membro atualizado!'); }
+  else               { addM(d);     toast('✅ Membro adicionado!'); }
+  load(); closeAdd(); renderBday(); renderUpcoming(); renderStats(); render(); syncMembersToSW();
+}
+
+function openDel(id) { delId = id; document.getElementById('del-ov').classList.add('show'); }
+function closeDel()  { delId = null; document.getElementById('del-ov').classList.remove('show'); }
+function confirmDel() {
+  if (delId) { delM(delId); load(); renderBday(); renderUpcoming(); renderStats(); render(); toast('🗑️ Membro removido.'); }
+  closeDel();
+}
+
+// ─── IMPORTAR / EXPORTAR ─────────────────────────────────
+function exportData() {
+  const b = new Blob([JSON.stringify(members, null, 2)], { type: 'application/json' });
+  const u = URL.createObjectURL(b);
+  const a = document.createElement('a');
+  a.href = u; a.download = `ministerio60plus_${new Date().toISOString().slice(0, 10)}.json`;
+  a.click(); URL.revokeObjectURL(u);
+  toast('💾 Backup exportado!');
+}
+function importData(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    try {
+      const d = JSON.parse(ev.target.result);
+      if (Array.isArray(d)) { members = d; save(); renderBday(); renderUpcoming(); renderStats(); render(); toast(`✅ ${d.length} membros importados!`); }
+      else toast('❌ Arquivo inválido.');
+    } catch { toast('❌ Erro ao importar.'); }
+  };
+  r.readAsText(f); e.target.value = '';
+}
+
+// ─── MÁSCARA DE TELEFONE ─────────────────────────────────
+function maskPhone(inp) {
+  let v = inp.value.replace(/\D/g, '').slice(0, 11);
+  if (v.length > 10)     v = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+  else if (v.length > 6) v = v.replace(/^(\d{2})(\d{4,5})(\d{0,4})$/, '($1) $2-$3');
+  else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
+  else if (v.length > 0) v = '(' + v;
+  inp.value = v;
+}
+
+// ─── SERVICE WORKER & LEMBRETES AUTOMÁTICOS ──────────────
+let swReg = null;
+
+async function setupSW() {
+  if (!('serviceWorker' in navigator)) return;
+  try {
+    swReg = await navigator.serviceWorker.register('./sw.js');
+    await navigator.serviceWorker.ready;
+    syncMembersToSW();
+  } catch (e) { /* SW indisponível em file:// — usa fallback local */ }
+}
+
+function syncMembersToSW() {
+  if (!swReg?.active) return;
+  swReg.active.postMessage({ type: 'SYNC', members });
+}
+
+// Verificação local (funciona sem SW, ideal para quando abre o site)
+async function checkBirthdaysLocally() {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  const today = new Date();
+  const key   = `bday_notif_${today.getFullYear()}_${today.getMonth()}_${today.getDate()}`;
+  if (localStorage.getItem(key)) return;   // já notificou hoje
+
+  const aniversariantes = members.filter(m => isToday(m.birthDate));
+  if (!aniversariantes.length) return;
+
+  localStorage.setItem(key, '1');
+
+  // Se SW disponível, usa ele (mostra mesmo com aba fechada)
+  if (swReg?.active) {
+    swReg.active.postMessage({ type: 'CHECK_NOW' });
+    return;
+  }
+
+  // Fallback: notificação direta
+  for (const m of aniversariantes) {
+    const anos  = age(m.birthDate);
+    const msg   = `🎂 *Lembrete de Aniversário — Ministério 60+*\n\nHoje, ${today.toLocaleDateString('pt-BR')}, é aniversário de:\n\n👤 *${m.name}*\n📱 ${m.phone}\n🎉 Completando *${anos} anos!*\n\nNão esqueça de ligar e parabenizar! 🙏❤️`;
+    const waUrl = `https://wa.me/${NOTIFY_NUM}?text=${encodeURIComponent(msg)}`;
+    const n = new Notification(`🎂 Aniversário: ${m.name}`, {
+      body: `Hoje completa ${anos} anos! Clique para enviar parabéns.`,
+      icon: './logo.png',
+      tag:  `bday-${m.id}`
+    });
+    n.onclick = () => { window.open(waUrl, '_blank'); n.close(); };
+  }
+}
+
+// Ativa/desativa lembretes automáticos
+async function toggleReminder() {
+  if (!('Notification' in window)) {
+    toast('⚠️ Seu navegador não suporta notificações.'); return;
+  }
+
+  const enabled = localStorage.getItem('reminders_on') === '1';
+
+  if (enabled) {
+    localStorage.removeItem('reminders_on');
+    updateReminderBtn();
+    toast('🔕 Lembretes desativados.');
+    return;
+  }
+
+  const perm = await Notification.requestPermission();
+  if (perm !== 'granted') {
+    toast('⚠️ Permissão de notificações negada. Ative nas configurações do navegador.'); return;
+  }
+
+  localStorage.setItem('reminders_on', '1');
+
+  // Tenta registrar periodic sync (Chrome com site instalado como PWA)
+  if (swReg && 'periodicSync' in swReg) {
+    try {
+      await swReg.periodicSync.register('birthday-check', {
+        minInterval: 24 * 60 * 60 * 1000
+      });
+    } catch {}
+  }
+
+  // Limpa a chave de hoje para disparar imediatamente se houver aniversariante
+  const today = new Date();
+  localStorage.removeItem(`bday_notif_${today.getFullYear()}_${today.getMonth()}_${today.getDate()}`);
+  checkBirthdaysLocally();
+
+  updateReminderBtn();
+  toast('🔔 Lembretes ativados! Você receberá uma notificação nos dias de aniversário.');
+}
+
+function updateReminderBtn() {
+  const btn = document.getElementById('reminder-btn');
+  if (!btn) return;
+  const on = localStorage.getItem('reminders_on') === '1';
+  btn.className = 'btn-reminder' + (on ? ' active' : '');
+  btn.innerHTML = on ? '🔔 Lembretes ON' : '🔔 Lembretes';
+  btn.title     = on ? 'Lembretes ativados — clique para desativar' : 'Clique para ativar lembretes automáticos';
+}
+
+// ─── TOAST ───────────────────────────────────────────────
+let tt;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(tt); tt = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ─── FECHAR MODAL AO CLICAR FORA ─────────────────────────
+document.getElementById('add-ov').addEventListener('click', e => { if (e.target.id === 'add-ov') closeAdd(); });
+document.getElementById('del-ov').addEventListener('click', e => { if (e.target.id === 'del-ov') closeDel(); });
+
+// ─── INICIAR ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', boot);
+</script>
+</body>
+</html>
