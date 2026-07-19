@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ministério 60+ — Igreja Metodista Wesleyana de Itaquera</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://js.puter.com/v2/"></script>
   <style>
     :root {
       --navy:    #0C2461;
@@ -897,7 +896,7 @@ let editing = false;
 
 // ─── ARMAZENAMENTO ───────────────────────────────────────
 function load() { try { members = JSON.parse(localStorage.getItem(SK)) || []; } catch { members = []; } }
-function save() { localStorage.setItem(SK, JSON.stringify(members)); pushToCloud(); }
+function save() { localStorage.setItem(SK, JSON.stringify(members)); saveToCloud(); }
 
 function addM(d) {
   const m = {
@@ -973,11 +972,23 @@ function handleLogout() {
 }
 
 // ─── CADASTRO PÚBLICO ────────────────────────────────────
-function handleRegister(e) {
+async function handleRegister(e) {
   e.preventDefault();
+  const btn   = e.target.querySelector('button[type=submit]');
   const name  = document.getElementById('reg-name').value.trim();
   const phone = document.getElementById('reg-phone').value.trim();
   const birth = document.getElementById('reg-birth').value;
+
+  // Puxa dados da nuvem antes de salvar para não sobrescrever outros membros
+  if (fbReady()) {
+    if (btn) { btn.disabled = true; btn.textContent = 'Enviando…'; }
+    try {
+      const r    = await fetch(FB_URL + FB_PATH);
+      const data = await r.json();
+      if (Array.isArray(data) && data.length > 0) members = data;
+    } catch {}
+  }
+
   addM({ name, phone, birthDate: birth });
   document.getElementById('reg-form-wrap').style.display = 'none';
   document.getElementById('reg-success').classList.add('show');
@@ -1003,7 +1014,7 @@ function setupDash() {
   setupSW();
   updateReminderBtn();
   load();
-  autoCloudSync();
+  loadFromCloud();
   // Verifica aniversários assim que o painel abre (independente do SW)
   if (localStorage.getItem('reminders_on') === '1') {
     checkBirthdaysLocally();
@@ -1213,66 +1224,59 @@ function maskPhone(inp) {
   inp.value = v;
 }
 
-// ─── SINCRONIZAÇÃO EM NUVEM (Puter.js) ───────────────────
-const CLOUD_KEY = 'min60plus_members';
+// ─── SINCRONIZAÇÃO EM NUVEM (Firebase Realtime Database) ─
+// Substitua pelo URL do seu projeto Firebase:
+// console.firebase.google.com → Realtime Database → copie a URL
+const FB_URL  = 'COLE_AQUI_A_URL_DO_FIREBASE';
+const FB_PATH = '/min60plus/members.json';
 
-// Chamada automaticamente no login — sem passo extra
-async function autoCloudSync() {
+function fbReady() { return !FB_URL.includes('COLE_AQUI'); }
+
+async function loadFromCloud() {
+  if (!fbReady()) return;
   const btn = document.getElementById('cloud-btn');
   if (btn) { btn.classList.add('syncing'); btn.innerHTML = '☁️ Sincronizando…'; }
   try {
-    const signedIn = await puter.auth.isSignedIn();
-    if (!signedIn) {
-      // Primeira vez no dispositivo: abre dialog Puter (só ocorre uma vez)
-      await puter.auth.signIn();
+    const r    = await fetch(FB_URL + FB_PATH);
+    const data = await r.json();
+    if (Array.isArray(data) && data.length > 0) {
+      members = data;
+      localStorage.setItem(SK, JSON.stringify(members));
+    } else if (members.length > 0) {
+      await saveToCloud();
     }
-    await pullFromCloud();
-    renderBday(); renderUpcoming(); renderStats(); render();
     updateCloudBtn(true);
+    renderBday(); renderUpcoming(); renderStats(); render();
   } catch {
-    // Se cancelar ou falhar, continua com dados locais
     updateCloudBtn(false);
   }
   if (btn) btn.classList.remove('syncing');
 }
 
-async function pullFromCloud() {
+async function saveToCloud() {
+  if (!fbReady()) return;
   try {
-    const data = await puter.kv.get(CLOUD_KEY);
-    if (!data) {
-      await puter.kv.set(CLOUD_KEY, JSON.stringify(members));
-      return;
-    }
-    const cloudMembers = JSON.parse(data);
-    // Usa os dados da nuvem como fonte principal
-    members = cloudMembers;
-    localStorage.setItem(SK, data);
-  } catch {}
-}
-
-async function pushToCloud() {
-  try {
-    const signedIn = await puter.auth.isSignedIn();
-    if (signedIn) await puter.kv.set(CLOUD_KEY, JSON.stringify(members));
+    await fetch(FB_URL + FB_PATH, {
+      method:  'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(members)
+    });
+    updateCloudBtn(true);
   } catch {}
 }
 
 async function connectCloud() {
+  if (!fbReady()) { toast('⚠️ Firebase ainda não configurado.'); return; }
   const btn = document.getElementById('cloud-btn');
   btn.classList.add('syncing');
   btn.innerHTML = '☁️ Sincronizando…';
   try {
-    const signedIn = await puter.auth.isSignedIn();
-    if (!signedIn) await puter.auth.signIn();
-    await pullFromCloud();
-    renderBday(); renderUpcoming(); renderStats(); render();
-    updateCloudBtn(true);
-    toast('☁️ Dados sincronizados!');
+    await loadFromCloud();
+    toast('☁️ Dados sincronizados com sucesso!');
   } catch {
     updateCloudBtn(false);
     toast('❌ Erro ao sincronizar.');
   }
-  btn.classList.remove('syncing');
 }
 
 function updateCloudBtn(online) {
@@ -1280,7 +1284,7 @@ function updateCloudBtn(online) {
   if (!btn) return;
   btn.className = 'btn-cloud' + (online ? ' online' : '');
   btn.innerHTML  = online ? '☁️ Nuvem ON' : '☁️ Nuvem';
-  btn.title      = online ? 'Sincronizado — clique para atualizar' : 'Clique para conectar e sincronizar';
+  btn.title      = online ? 'Sincronizado — clique para forçar sincronização' : 'Clique para sincronizar entre dispositivos';
 }
 
 // ─── SERVICE WORKER & LEMBRETES AUTOMÁTICOS ──────────────
