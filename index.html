@@ -623,18 +623,53 @@
     }
     #toast.show { transform: translateX(-50%) translateY(0); }
 
+    /* ─── DASH ACTIONS ─── */
+    .dash-actions {
+      display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
+    }
+    .dash-greeting { font-size: .8125rem; opacity: .9; }
+
     /* ─── RESPONSIVE ─── */
     @media (max-width: 640px) {
-      .dash-body   { padding: 1.25rem 1rem; }
-      .stats-row   { grid-template-columns: 1fr 1fr; }
-      .mgrid       { grid-template-columns: 1fr; }
-      .toolbar     { flex-direction: column; align-items: stretch; }
-      .toolbar .btn{ justify-content: center; }
-      .login-card  { padding: 2rem 1.5rem; }
-      .reg-card    { padding: 1.75rem 1.25rem; }
-      .top-bar     { padding: .875rem 1rem; }
+      .top-bar        { padding: .75rem 1rem; }
+      .top-bar-inner  { gap: .5rem; }
+      .brand-logo     { width: 40px; height: 40px; border-radius: 10px; }
+      .brand-txt h1   { font-size: .875rem; }
+      .brand-txt p    { font-size: .625rem; }
+      .dash-greeting  { display: none; }
+      .dash-actions   { gap: .4rem; }
+      .btn-cloud, .btn-reminder { font-size: .7rem; padding: .375rem .5rem; }
+      .btn-logout     { font-size: .7rem; padding: .375rem .625rem; }
+
+      .dash-body      { padding: 1.25rem .875rem; }
+
+      .stats-row      { grid-template-columns: repeat(3, 1fr); gap: .625rem; }
+      .stat-card      { padding: .75rem .625rem; flex-direction: column; align-items: flex-start; gap: .375rem; }
+      .stat-ico       { width: 36px; height: 36px; font-size: 1rem; border-radius: 10px; }
+      .stat-num       { font-size: 1.375rem; }
+      .stat-lbl       { font-size: .6rem; }
+
+      .link-row       { flex-wrap: wrap; gap: .5rem; }
+      .link-inp       { width: 100%; flex: unset; }
+      .link-row .btn  { flex: 1; }
+
+      .mgrid          { grid-template-columns: 1fr; }
+      .toolbar        { flex-direction: column; align-items: stretch; }
+      .toolbar .btn   { justify-content: center; }
+
+      .bday-chip      { flex-wrap: wrap; gap: .5rem; }
+      .bday-chip .btn { width: 100%; }
+
+      .login-card     { padding: 2rem 1.5rem; }
+      .reg-card       { padding: 1.75rem 1.25rem; }
     }
-    @media (max-width: 400px) { .stats-row { grid-template-columns: 1fr; } }
+    @media (max-width: 380px) {
+      .stats-row      { grid-template-columns: 1fr; }
+      .stat-card      { flex-direction: row; align-items: center; gap: .75rem; padding: .875rem 1rem; }
+      .stat-ico       { width: 42px; height: 42px; font-size: 1.125rem; border-radius: 12px; }
+      .stat-num       { font-size: 1.5rem; }
+      .stat-lbl       { font-size: .7rem; }
+    }
   </style>
 </head>
 <body>
@@ -741,8 +776,8 @@
           <p>Sistema de Gestão de Membros</p>
         </div>
       </div>
-      <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
-        <span style="font-size:.8125rem;opacity:.9;">Olá, <strong>Ivonete</strong> 👋</span>
+      <div class="dash-actions">
+        <span class="dash-greeting">Olá, <strong>Ivonete</strong> 👋</span>
         <button id="cloud-btn" class="btn-cloud" onclick="connectCloud()" title="Sincronizar dados entre dispositivos">
           ☁️ Nuvem
         </button>
