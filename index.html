@@ -422,6 +422,9 @@
       transition: box-shadow .2s;
     }
     .stat-card:hover { box-shadow: var(--sh2); }
+    .stat-card.clickable { cursor: pointer; }
+    .stat-card.filter-on { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(26,86,219,.15); }
+    .stat-card.filter-on .stat-num { color: var(--blue); }
     .stat-ico {
       width: 48px; height: 48px;
       border-radius: 13px;
@@ -807,21 +810,21 @@
 
     <!-- Stats -->
     <div class="stats-row">
-      <div class="stat-card">
+      <div class="stat-card clickable" id="sc-all" onclick="filterBy('all')" title="Ver todos os membros">
         <div class="stat-ico bl">👥</div>
         <div>
           <div class="stat-num" id="s-total">0</div>
           <div class="stat-lbl">Total de Membros</div>
         </div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card clickable" id="sc-month" onclick="filterBy('month')" title="Ver aniversariantes deste mês">
         <div class="stat-ico gd">🎂</div>
         <div>
           <div class="stat-num" id="s-month">0</div>
           <div class="stat-lbl">Aniversários este Mês</div>
         </div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card clickable" id="sc-today" onclick="filterBy('today')" title="Ver aniversariantes de hoje">
         <div class="stat-ico gn">🎉</div>
         <div>
           <div class="stat-num" id="s-today">0</div>
@@ -929,9 +932,10 @@ const ADMIN_PASS = 'imw';
 const NOTIFY_NUM = '5511995823831';  // +55 11 99582-3831
 
 // ─── ESTADO ──────────────────────────────────────────────
-let members = [];
-let delId   = null;
-let editing = false;
+let members      = [];
+let delId        = null;
+let editing      = false;
+let activeFilter = 'all'; // 'all' | 'month' | 'today'
 
 // ─── ARMAZENAMENTO ───────────────────────────────────────
 function load() { try { members = JSON.parse(localStorage.getItem(SK)) || []; } catch { members = []; } }
@@ -1109,9 +1113,24 @@ function renderStats() {
   document.getElementById('s-today').textContent = members.filter(m => isToday(m.birthDate)).length;
 }
 
+function filterBy(type) {
+  activeFilter = type;
+  ['all','month','today'].forEach(t => {
+    const id = t === 'all' ? 'sc-all' : t === 'month' ? 'sc-month' : 'sc-today';
+    document.getElementById(id)?.classList.toggle('filter-on', t === type);
+  });
+  render();
+}
+
 function render() {
   const q    = (document.getElementById('srch')?.value || '').toLowerCase().trim();
-  let   list = members.filter(m => !q || m.name.toLowerCase().includes(q) || m.phone.includes(q));
+  let   list = members.filter(m => {
+    const matchQ = !q || m.name.toLowerCase().includes(q) || m.phone.includes(q);
+    const matchF = activeFilter === 'all'   ? true
+                 : activeFilter === 'month' ? isMonth(m.birthDate)
+                 : isToday(m.birthDate);
+    return matchQ && matchF;
+  });
   list.sort((a, b) => {
     const aT = isToday(a.birthDate) ? 0 : 1;
     const bT = isToday(b.birthDate) ? 0 : 1;
@@ -1120,7 +1139,8 @@ function render() {
   });
 
   const grid = document.getElementById('mgrid');
-  document.getElementById('mbr-cnt').textContent = `${list.length} membro${list.length !== 1 ? 's' : ''}`;
+  const filterLabel = activeFilter === 'month' ? ' · Mês atual' : activeFilter === 'today' ? ' · Hoje' : '';
+  document.getElementById('mbr-cnt').textContent = `${list.length} membro${list.length !== 1 ? 's' : ''}${filterLabel}`;
 
   if (!list.length) {
     grid.innerHTML = `
