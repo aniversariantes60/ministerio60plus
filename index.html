@@ -507,8 +507,21 @@
       font-weight: 800;
       display: flex; align-items: center; justify-content: center;
       letter-spacing: -.01em;
+      overflow: hidden;
     }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
     .mcard.is-bday .avatar { background: linear-gradient(135deg, var(--gold-d), var(--gold)); }
+
+    /* Photo upload in modal */
+    .photo-row { display: flex; align-items: center; gap: .875rem; flex-wrap: wrap; }
+    .photo-thumb {
+      width: 64px; height: 64px; border-radius: 14px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--navy), var(--blue2));
+      color: #fff; font-size: 1.125rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; border: 2px solid var(--border);
+    }
+    .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .mcard-info { flex: 1; min-width: 0; }
     .mcard-name  { font-weight: 800; font-size: .9375rem; color: var(--txt); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .mcard-phone { font-size: .8125rem; color: var(--muted); margin-top: .125rem; }
@@ -918,6 +931,19 @@
     <form id="add-form" onsubmit="saveMember(event)">
       <input type="hidden" id="edit-id">
       <div class="fld">
+        <label class="lbl">Foto (opcional)</label>
+        <div class="photo-row">
+          <div class="photo-thumb" id="a-photo-thumb">?</div>
+          <div style="display:flex;flex-direction:column;gap:.375rem;">
+            <label class="btn btn-ghost btn-sm" style="cursor:pointer;">
+              📷 Escolher Foto
+              <input type="file" id="a-photo" accept="image/*" onchange="previewPhoto(this)" style="display:none">
+            </label>
+            <button type="button" id="clear-photo-btn" onclick="clearPhoto()" class="btn btn-danger btn-sm" style="display:none;">✕ Remover foto</button>
+          </div>
+        </div>
+      </div>
+      <div class="fld">
         <label class="lbl">Nome Completo</label>
         <input type="text" id="a-name" class="inp" placeholder="Nome completo" required>
       </div>
@@ -976,7 +1002,8 @@ const USERS = [
 let members      = [];
 let delId        = null;
 let editing      = false;
-let activeFilter = 'all'; // 'all' | 'month' | 'today'
+let activeFilter = 'all'; // 'all' | 'month' | 'today' | 'past'
+let pendingPhoto = null;  // null = sem foto, 'data:...' = nova foto
 
 // ─── ARMAZENAMENTO ───────────────────────────────────────
 function load() { try { members = JSON.parse(localStorage.getItem(SK)) || []; } catch { members = []; } }
@@ -988,13 +1015,14 @@ function addM(d) {
     name: d.name.trim(),
     phone: d.phone.trim(),
     birthDate: d.birthDate,
+    photo: d.photo || null,
     createdAt: new Date().toISOString()
   };
   members.push(m); save(); return m;
 }
 function updM(id, d) {
   const i = members.findIndex(m => m.id === id);
-  if (i > -1) { members[i] = { ...members[i], name: d.name.trim(), phone: d.phone.trim(), birthDate: d.birthDate }; save(); }
+  if (i > -1) { members[i] = { ...members[i], name: d.name.trim(), phone: d.phone.trim(), birthDate: d.birthDate, photo: d.photo }; save(); }
 }
 function delM(id) { members = members.filter(m => m.id !== id); save(); }
 
@@ -1218,7 +1246,7 @@ function render() {
     return `
       <div class="mcard${td ? ' is-bday' : soon ? ' is-soon' : past ? ' is-past' : ''}">
         <div class="mcard-head">
-          <div class="avatar">${initials(m.name)}</div>
+          <div class="avatar">${m.photo ? `<img src="${m.photo}" alt="${m.name}">` : initials(m.name)}</div>
           <div class="mcard-info">
             <div class="mcard-name" title="${m.name}">${m.name}</div>
             <div class="mcard-phone">📱 ${m.phone}</div>
@@ -1273,10 +1301,12 @@ function shareWA() {
 // ─── MODAIS ──────────────────────────────────────────────
 function openAdd() {
   editing = false;
+  pendingPhoto = null;
   document.getElementById('modal-ttl').textContent = '➕ Adicionar Membro';
   document.getElementById('m-submit').textContent  = 'Salvar Membro';
   document.getElementById('edit-id').value = '';
   document.getElementById('add-form').reset();
+  setPhotoThumb(null, '?');
   document.getElementById('add-ov').classList.add('show');
   document.getElementById('a-name').focus();
 }
@@ -1286,12 +1316,14 @@ function openEdit(id) {
   const m = members.find(x => x.id === id);
   if (!m) return;
   editing = true;
+  pendingPhoto = m.photo || null;
   document.getElementById('modal-ttl').textContent = '✏️ Editar Membro';
   document.getElementById('m-submit').textContent  = 'Atualizar';
   document.getElementById('edit-id').value  = id;
   document.getElementById('a-name').value   = m.name;
   document.getElementById('a-phone').value  = m.phone;
   document.getElementById('a-birth').value  = formatDateBR(m.birthDate);
+  setPhotoThumb(m.photo, initials(m.name));
   document.getElementById('add-ov').classList.add('show');
   document.getElementById('a-name').focus();
 }
@@ -1300,7 +1332,7 @@ function saveMember(e) {
   e.preventDefault();
   const birthDate = parseDateBR(document.getElementById('a-birth').value);
   if (!birthDate) { toast('❌ Data inválida. Use dd/mm/aaaa.'); return; }
-  const d  = { name: document.getElementById('a-name').value, phone: document.getElementById('a-phone').value, birthDate };
+  const d  = { name: document.getElementById('a-name').value, phone: document.getElementById('a-phone').value, birthDate, photo: pendingPhoto };
   const id = document.getElementById('edit-id').value;
   if (editing && id) { updM(id, d); toast('✅ Membro atualizado!'); }
   else               { addM(d);     toast('✅ Membro adicionado!'); }
@@ -1349,6 +1381,48 @@ function importData(e) {
     } catch { toast('❌ Erro ao importar.'); }
   };
   r.readAsText(f); e.target.value = '';
+}
+
+// ─── FOTO ────────────────────────────────────────────────
+function setPhotoThumb(src, fallback) {
+  const thumb = document.getElementById('a-photo-thumb');
+  const clearBtn = document.getElementById('clear-photo-btn');
+  if (src) {
+    thumb.innerHTML = `<img src="${src}">`;
+    clearBtn.style.display = '';
+  } else {
+    thumb.innerHTML = fallback || '?';
+    clearBtn.style.display = 'none';
+  }
+}
+
+function previewPhoto(input) {
+  const f = input.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = 160;
+      const ctx = canvas.getContext('2d');
+      const size = Math.min(img.width, img.height);
+      const ox = (img.width - size) / 2;
+      const oy = (img.height - size) / 2;
+      ctx.drawImage(img, ox, oy, size, size, 0, 0, 160, 160);
+      pendingPhoto = canvas.toDataURL('image/jpeg', 0.75);
+      setPhotoThumb(pendingPhoto, '');
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(f);
+}
+
+function clearPhoto() {
+  pendingPhoto = null;
+  document.getElementById('a-photo').value = '';
+  const name = document.getElementById('a-name').value;
+  setPhotoThumb(null, name ? initials(name) : '?');
 }
 
 // ─── MÁSCARAS ────────────────────────────────────────────
