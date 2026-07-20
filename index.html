@@ -1283,17 +1283,22 @@ function confirmDel() {
 
 // ─── IMPORTAR / EXPORTAR ─────────────────────────────────
 function exportData() {
-  const rows = members.map(m => ({
-    'Nome':               m.name,
-    'Telefone':           m.phone,
-    'Data de Nascimento': fmtD(m.birthDate),
-    'Idade':              m.birthDate ? age(m.birthDate) + ' anos' : '',
-    'Mês de Aniversário': m.birthDate ? dob(m.birthDate).toLocaleString('pt-BR', { month: 'long' }) : '',
-    'Cadastrado em':      m.createdAt ? new Date(m.createdAt).toLocaleDateString('pt-BR') : ''
-  }));
+  const rows = members.map(m => {
+    const d = m.birthDate ? daysUntil(m.birthDate) : null;
+    const diasLabel = d === null ? '' : d === 0 ? '🎂 Hoje!' : `${d} dia${d === 1 ? '' : 's'}`;
+    return {
+      'Nome':                    m.name,
+      'Telefone':                m.phone,
+      'Data de Nascimento':      fmtD(m.birthDate),
+      'Idade':                   m.birthDate ? age(m.birthDate) + ' anos' : '',
+      'Mês de Aniversário':      m.birthDate ? dob(m.birthDate).toLocaleString('pt-BR', { month: 'long' }) : '',
+      'Dias para o Aniversário': diasLabel,
+      'Cadastrado em':           m.createdAt ? new Date(m.createdAt).toLocaleDateString('pt-BR') : ''
+    };
+  });
 
   const ws = XLSX.utils.json_to_sheet(rows);
-  ws['!cols'] = [{ wch: 35 }, { wch: 18 }, { wch: 20 }, { wch: 12 }, { wch: 18 }, { wch: 15 }];
+  ws['!cols'] = [{ wch: 35 }, { wch: 18 }, { wch: 20 }, { wch: 12 }, { wch: 18 }, { wch: 22 }, { wch: 15 }];
 
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Membros 60+');
