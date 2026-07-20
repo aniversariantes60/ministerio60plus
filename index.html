@@ -1189,13 +1189,7 @@ function render() {
                  : (isPastThisYear(m.birthDate) && !isToday(m.birthDate));
     return matchQ && matchF;
   });
-  list.sort((a, b) => {
-    const rank = m => isToday(m.birthDate) ? 0 : (daysUntil(m.birthDate) <= 7 ? 1 : (isPastThisYear(m.birthDate) ? 3 : 2));
-    const ra = rank(a), rb = rank(b);
-    if (ra !== rb) return ra - rb;
-    if (ra === 1) return daysUntil(a.birthDate) - daysUntil(b.birthDate);
-    return a.name.localeCompare(b.name, 'pt-BR');
-  });
+  list.sort((a, b) => daysUntil(a.birthDate) - daysUntil(b.birthDate));
 
   const grid = document.getElementById('mgrid');
   const filterLabel = activeFilter === 'month' ? ' · Mês atual' : activeFilter === 'today' ? ' · Hoje' : activeFilter === 'past' ? ' · Já aniversariaram' : '';
