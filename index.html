@@ -811,7 +811,7 @@
         </div>
       </div>
       <div class="dash-actions">
-        <span class="dash-greeting">Olá, <strong>Ivonete</strong> 👋</span>
+        <span class="dash-greeting" id="dash-greeting">Olá 👋</span>
         <button id="cloud-btn" class="btn-cloud" onclick="connectCloud()" title="Sincronizar dados entre dispositivos">
           ☁️ Nuvem
         </button>
@@ -956,9 +956,13 @@
 <script>
 // ─── CONSTANTES ──────────────────────────────────────────
 const SK         = 'ministerio60plus_v1';
-const ADMIN_USER = 'ivonete';
-const ADMIN_PASS = 'imw';
 const NOTIFY_NUM = '5511995823831';  // +55 11 99582-3831
+const USERS = [
+  { user: 'ivonete',  pass: 'imw',        name: 'Ivonete'  },
+  { user: 'laura',    pass: 'imw',        name: 'Laura'    },
+  { user: 'adeilton', pass: 'Laisa@1000', name: 'Adeilton' },
+  { user: 'cleonice', pass: 'imw',        name: 'Cleonice' },
+];
 
 // ─── ESTADO ──────────────────────────────────────────────
 let members      = [];
@@ -1033,12 +1037,14 @@ function show(n) {
 // ─── LOGIN / LOGOUT ──────────────────────────────────────
 function handleLogin(e) {
   e.preventDefault();
-  const u = document.getElementById('login-user').value.trim();
-  const p = document.getElementById('login-pass').value;
+  const u   = document.getElementById('login-user').value.trim().toLowerCase();
+  const p   = document.getElementById('login-pass').value;
   const err = document.getElementById('login-err');
-  if (u === ADMIN_USER && p === ADMIN_PASS) {
+  const found = USERS.find(x => x.user === u && x.pass === p);
+  if (found) {
     err.classList.remove('show');
     sessionStorage.setItem('m60', '1');
+    sessionStorage.setItem('m60_name', found.name);
     show('dashboard'); setupDash();
   } else {
     err.classList.add('show');
@@ -1094,6 +1100,9 @@ function autoAdd(enc) {
 
 // ─── DASHBOARD ───────────────────────────────────────────
 function setupDash() {
+  const name = sessionStorage.getItem('m60_name') || 'Admin';
+  const greet = document.getElementById('dash-greeting');
+  if (greet) greet.innerHTML = `Olá, <strong>${name}</strong> 👋`;
   setupSW();
   updateReminderBtn();
   load();
